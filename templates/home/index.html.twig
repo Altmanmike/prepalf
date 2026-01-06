@@ -4,7 +4,8 @@
 
 {% block body %}
 
-    <div style="margin:20px">
+    <div class="container my-5">
+
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger">
                 ❌ {{ message }}
@@ -16,28 +17,41 @@
                 ✅ {{ message }}
             </div>
         {% endfor %}
-        
-        <ul>
-        {% for product in products %}
+
+        <div class="d-flex flex-col">
+
+            <div class="mx-auto my-4 ">
+
+            <h3>LIST PRODUCTS AND TAGS :</h3>
+                        
+            <ul>
+            {% for product in products %}
+                
+                <li>{{ product.name }} =>> 
+                    <ul>{% for pT in product.tags %}
+                            <li>{{ pT.name }} : {{ pT.description }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>                        
             
-            <li>{{ product.name }} =>> 
-                <ul>{% for pT in product.tags %}
-                        <li>{{ pT.name }} : {{ pT.description }}</li>
-                    {% endfor %}
-                </ul>
-            </li>                        
-           
-        {% endfor %}
-        </ul>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mx-auto my-3">
+
+            <h3>ADD A NEW PRODUCT :</h3>
+
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+
+                <input class="btn btn-primary" type="submit">
+            {{ form_end(form) }}
+
+        </div>
+
+        </div>
+       
     </div>
 
-    <div style="margin:20px">
-    ADD A NEW PRODUCT :
-        {{ form_start(form) }}
-            {{ form_widget(form) }}
-
-            <input class="btn btn-primary" type="submit">
-        {{ form_end(form) }}
-    </div>
-    
 {% endblock %}
