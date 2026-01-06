@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product add{% endblock %}
+
+{% block body %}
+
+    <div style="margin:20px">
+        <ul>
+        {% for product in products %}
+            
+            <li>{{ product.name }} =>> 
+                <ul>{% for pT in product.tags %}
+                        <li>{{ pT.name }} : {{ pT.description }}</li>
+                    {% endfor %}
+                </ul>
+            </li>                        
+           
+        {% endfor %}
+        </ul>
+    </div>
+
+    <div style="margin:20px">
+    ADD A NEW PRODUCT :
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+
+            <input type="submit">
+        {{ form_end(form) }}
+    </div>
+    
+{% endblock %}
