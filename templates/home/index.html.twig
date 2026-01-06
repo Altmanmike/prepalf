@@ -5,6 +5,18 @@
 {% block body %}
 
     <div style="margin:20px">
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                ❌ {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                ✅ {{ message }}
+            </div>
+        {% endfor %}
+        
         <ul>
         {% for product in products %}
             
@@ -24,7 +36,7 @@
         {{ form_start(form) }}
             {{ form_widget(form) }}
 
-            <input type="submit">
+            <input class="btn btn-primary" type="submit">
         {{ form_end(form) }}
     </div>
     

@@ -15,7 +15,7 @@ final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
     public function index(ProductRepository $pRepo, Request $request, EntityManagerInterface $entityManager): Response
-    {
+    {        
         $products = $pRepo->findAll();       
         //dd($products);
         
@@ -24,16 +24,22 @@ final class HomeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->setName(htmlspecialchars(trim($form->get('name')->getData())));
-            $product->setPrice(htmlspecialchars(trim($form->get('price')->getData())));
-            $product->setStock(htmlspecialchars(trim($form->get('stock')->getData())));            
-            foreach ($form->get('tags')->getData() as $t) {                
-                $product->addTag($t);
+
+            try {
+                $product->setName(htmlspecialchars(trim($form->get('name')->getData())));
+                $product->setPrice(htmlspecialchars(trim($form->get('price')->getData())));
+                $product->setStock(htmlspecialchars(trim($form->get('stock')->getData())));            
+                foreach ($form->get('tags')->getData() as $t) {                
+                    $product->addTag($t);
+                }
+                $entityManager->persist($product);
+                $entityManager->flush();
+                $this->addFlash('success', 'Product saved.');
+                return $this->redirectToRoute('app_home');
+            } catch (\Exception $e) {
+                $this->addFlash('error', $e->getMessage());
+                return $this->redirectToRoute('app_home');               
             }
-            $entityManager->persist($product);
-            $entityManager->flush();
-            
-            return $this->redirectToRoute('app_home');
         }
         
         return $this->render('home/index.html.twig', [
